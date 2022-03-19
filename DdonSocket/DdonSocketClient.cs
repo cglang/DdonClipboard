@@ -111,29 +111,25 @@ namespace DdonSocket
         {
             byte[] bytes;
             StringBuilder content = new();
-            long totalLength = 0;
-            do
+            if (readLength == 0) return content;
+            while (readLength != 0)
             {
                 bytes = await ReadStreamAsync(DdonSocketConst.Count);
                 content.Append(Encoding.UTF8.GetString(bytes));
-                totalLength += bytes.Length;
-                if (totalLength == readLength) break;
+                readLength -= bytes.Length;
             }
-            while (bytes.Length > 0);
             return content;
         }
 
         private async Task<byte[]> ReadByteContentAsync(long readLength)
         {
-            byte[] bytes;
-            long totalLength = 0;
-            do
+            byte[] bytes = Array.Empty<byte>();
+            if (readLength == 0) return bytes;
+            while (readLength != 0)
             {
                 bytes = await ReadStreamAsync(DdonSocketConst.Count);
-                totalLength += bytes.Length;
-                if (totalLength == readLength) break;
+                readLength -= bytes.Length;
             }
-            while (bytes.Length > 0);
             return bytes;
         }
 
