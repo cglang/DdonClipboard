@@ -1,7 +1,7 @@
 ﻿using System.Text;
 using System.Text.Json;
 
-namespace DdonSocket
+namespace DdonSocket.Extra
 {
     public class DdonSocketHeadDto
     {

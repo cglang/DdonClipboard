@@ -1,6 +1,6 @@
 ﻿using Serilog;
 
-namespace DdonSocket
+namespace DdonSocket.Extra
 {
     public class DdonSocketLogger
     {

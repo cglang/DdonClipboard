@@ -1,4 +1,4 @@
-﻿namespace DdonSocket
+﻿namespace DdonSocket.Extra
 {
     public struct DdonSocketOpcode
     {

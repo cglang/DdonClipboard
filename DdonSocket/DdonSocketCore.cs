@@ -1,4 +1,6 @@
-﻿namespace DdonSocket
+﻿using DdonSocket.Extra;
+
+namespace DdonSocket
 {
     public class DdonSocketCore
     {
