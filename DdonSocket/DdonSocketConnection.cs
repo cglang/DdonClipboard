@@ -4,7 +4,7 @@ namespace DdonSocket
 {
     public class DdonSocketConnection : DdonSocketClient
     {
-        public DdonSocketConnection(TcpClient tcpClient) : base(tcpClient) { }
+        public DdonSocketConnection(TcpClient tcpClient, IServiceProvider? service) : base(tcpClient, service) { }
 
         public new async Task<Guid> ConsecutiveReadStreamAsync() => await base.ConsecutiveReadStreamAsync();
     }

@@ -6,10 +6,12 @@ using System.Text.Json;
 
 namespace DdonSocket
 {
-    public class DdonSocketClient : DdonSocketCore, IDisposable
+    public class DdonSocketClient : DdonSocketDefaultHandler, IDisposable
     {
         //private readonly ILogger<DdonSocketClient>? _logger = DdonSocketLogger.GetLogger<DdonSocketClient>();
         protected const int GuidLength = 16;
+
+        private readonly IServiceProvider? _serviceProvider;
 
         /// <summary>
         /// 客户端Id
@@ -35,10 +37,11 @@ namespace DdonSocket
             ClientId = new Guid(data.Result);
         }
 
-        protected DdonSocketClient(TcpClient tcpClient)
+        protected DdonSocketClient(TcpClient tcpClient, IServiceProvider? serviceProvider)
         {
             DdonSocketLogger.InitLogger();
             TcpClient = tcpClient;
+            this._serviceProvider = serviceProvider;
             Stream.Write(ClientId.ToByteArray(), 0, GuidLength);
         }
 
@@ -80,16 +83,16 @@ namespace DdonSocket
                     if (head.Type is DdonSocketDataType.File)
                     {
                         var bytes = await ReadByteContentAsync(head.Length);
-                        FileStreamHandler?.Invoke(head, bytes);
+                        FileByteHandler?.Invoke(_serviceProvider, head, bytes);
                     }
                     else if (head.Type is DdonSocketDataType.Byte)
                     {
-                        ByteStreamHandler?.Invoke(head, Stream);
+                        StreamHandler?.Invoke(_serviceProvider, head, Stream);
                     }
                     else if (head.Type is DdonSocketDataType.String)
                     {
                         var content = await ReadStringContentAsync(head.Length);
-                        StringStreamHandler?.Invoke(head, content.ToString());
+                        StringHandler?.Invoke(_serviceProvider, head, content.ToString());
                     }
                 }
             }

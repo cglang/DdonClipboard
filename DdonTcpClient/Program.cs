@@ -4,12 +4,12 @@
     {
         static async Task Main(string[] args)
         {
-            var ddonTcpClient = new DdonSocket.DdonSocketClient("127.0.0.1", 8888);
+            var ddonTcpClient = new DdonSocket.DdonSocketClient("127.0.0.1", 5003);
 
-            ddonTcpClient.StringContentHandler((clientid, data) =>
-            {
-                Console.WriteLine($"接收到来自服务端的数据:{data}");
-            });
+            //ddonTcpClient.SetStringContentHandler((null, clientid, data) =>
+            //{
+            //    Console.WriteLine($"接收到来自服务端的数据:{data}");
+            //});
 
             ddonTcpClient.StartRead();
 

@@ -9,6 +9,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DdonTcpClient", "DdonTcpCli
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DdonTcpServer", "DdonTcpServer\DdonTcpServer.csproj", "{265CB90E-9C58-4ECF-91D2-4C6F397D14C9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApplication1", "WebApplication1\WebApplication1.csproj", "{93D69F44-6CE5-4C7D-BBBA-065CC92399B3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DdonInvokeCore", "DdonInvoke\DdonInvokeCore.csproj", "{D3A5167F-B8DF-4DC2-B479-FA8EBF4521BF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +31,14 @@ Global
 		{265CB90E-9C58-4ECF-91D2-4C6F397D14C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{265CB90E-9C58-4ECF-91D2-4C6F397D14C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{265CB90E-9C58-4ECF-91D2-4C6F397D14C9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{93D69F44-6CE5-4C7D-BBBA-065CC92399B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{93D69F44-6CE5-4C7D-BBBA-065CC92399B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{93D69F44-6CE5-4C7D-BBBA-065CC92399B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{93D69F44-6CE5-4C7D-BBBA-065CC92399B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D3A5167F-B8DF-4DC2-B479-FA8EBF4521BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D3A5167F-B8DF-4DC2-B479-FA8EBF4521BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D3A5167F-B8DF-4DC2-B479-FA8EBF4521BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D3A5167F-B8DF-4DC2-B479-FA8EBF4521BF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
