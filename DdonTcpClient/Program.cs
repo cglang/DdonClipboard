@@ -6,10 +6,10 @@
         {
             var ddonTcpClient = new DdonSocket.DdonSocketClient("127.0.0.1", 5003);
 
-            //ddonTcpClient.SetStringContentHandler((null, clientid, data) =>
-            //{
-            //    Console.WriteLine($"接收到来自服务端的数据:{data}");
-            //});
+            ddonTcpClient.SetStringContentHandler((info) =>
+            {
+                Console.WriteLine($"接收到来自服务端的数据:{info.Data}");
+            });
 
             ddonTcpClient.StartRead();
 
