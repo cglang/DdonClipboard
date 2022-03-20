@@ -10,23 +10,23 @@ Console.ReadKey();
 
 class DdonSocketClientHandler : IDdonSocketHandler
 {
-    public override Action<IServiceProvider?, DdonSocketHeadDto, string> StringHandler => async (service, head, data) =>
+    public override Action<DdonSocketPackageInfo<string>> StringHandler => async (info) =>
     {
-        if (head.Opcode.Equals(DdonSocketOpcode.Authentication))
+        if (info.Head.Opcode.Equals(DdonSocketOpcode.Authentication))
         {
             // 客户端要获取在线数量
         }
-        else if (head.Opcode.Equals(DdonSocketOpcode.Repost))
+        else if (info.Head.Opcode.Equals(DdonSocketOpcode.Repost))
         {
             // 客户端要转发文本
         }
-        var client = DdonSocketClientConnectionFactory.GetDdonTcpClient(head.SendClientId);
-        Console.WriteLine($"客户端:{head} 数据:{data}");
+        var client = DdonSocketClientConnectionFactory.GetDdonSocketClientConnectionFactory().GetClient(info.Head.SendClientId);
+        Console.WriteLine($"客户端:{info.Head} 数据:{info.Data}");
         if (client is not null)
-            await client.SendStringAsync(data);
+            await client.SendStringAsync(info.Data);
     };
 
-    public override Action<IServiceProvider?, DdonSocketHeadDto, byte[]> FileByteHandler => (a, b, c) => { };
+    public override Action<DdonSocketPackageInfo<byte[]>> FileByteHandler => (info) => { };
 
-    public override Action<IServiceProvider?, DdonSocketHeadDto, Stream> StreamHandler => (a, b, c) => { };
+    public override Action<DdonSocketPackageInfo<Stream>> StreamHandler => (info) => { };
 }

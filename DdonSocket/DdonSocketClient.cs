@@ -83,16 +83,16 @@ namespace DdonSocket
                     if (head.Type is DdonSocketDataType.File)
                     {
                         var bytes = await ReadByteContentAsync(head.Length);
-                        FileByteHandler?.Invoke(_serviceProvider, head, bytes);
+                        FileByteHandler?.Invoke(new DdonSocketPackageInfo<byte[]>(_serviceProvider, head, bytes));
                     }
                     else if (head.Type is DdonSocketDataType.Byte)
                     {
-                        StreamHandler?.Invoke(_serviceProvider, head, Stream);
+                        StreamHandler?.Invoke(new DdonSocketPackageInfo<Stream>(_serviceProvider, head, Stream));
                     }
                     else if (head.Type is DdonSocketDataType.String)
                     {
                         var content = await ReadStringContentAsync(head.Length);
-                        StringHandler?.Invoke(_serviceProvider, head, content.ToString());
+                        StringHandler?.Invoke(new DdonSocketPackageInfo<string>(_serviceProvider, head, content.ToString()));
                     }
                 }
             }

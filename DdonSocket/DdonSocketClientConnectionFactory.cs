@@ -2,19 +2,33 @@
 {
     public class DdonSocketClientConnectionFactory
     {
-        private static readonly Dictionary<Guid, DdonSocketClient> Pairs = new();
+        private static readonly object _lock = new();
 
-        public static DdonSocketClient? GetDdonTcpClient(Guid clientId)
+        private readonly Dictionary<Guid, DdonSocketClient> Pairs = new();
+
+        private static DdonSocketClientConnectionFactory? ddonSocketClientConnectionFactory;
+
+        public static DdonSocketClientConnectionFactory GetDdonSocketClientConnectionFactory()
+        {
+            lock (_lock)
+            {
+                if (ddonSocketClientConnectionFactory == null)
+                    ddonSocketClientConnectionFactory = new DdonSocketClientConnectionFactory();
+            }
+            return ddonSocketClientConnectionFactory;
+        }
+
+        public DdonSocketClient? GetClient(Guid clientId)
         {
             return Pairs.ContainsKey(clientId) ? Pairs[clientId] : null;
         }
 
-        public static void Add(DdonSocketClient client)
+        public void Add(DdonSocketClient client)
         {
             Pairs.Add(client.ClientId, client);
         }
 
-        public static void Remove(Guid clientId)
+        public void Remove(Guid clientId)
         {
             if (Pairs.ContainsKey(clientId))
                 Pairs.Remove(clientId);

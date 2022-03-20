@@ -41,7 +41,7 @@ namespace DdonSocket
         }
 
         private void InitHandler(IDdonSocketHandler handler)
-        {            
+        {
             SetStringContentHandler(handler.StringHandler);
             SetFileByteHandler(handler.FileByteHandler);
             SetStreamHandler(handler.StreamHandler);
@@ -58,7 +58,7 @@ namespace DdonSocket
                 {
                     var client = Server.AcceptTcpClient();
                     var clientConnection = new DdonSocketConnection(client, _services);
-                    DdonSocketClientConnectionFactory.Add(clientConnection);
+                    DdonSocketClientConnectionFactory.GetDdonSocketClientConnectionFactory().Add(clientConnection);
 
                     clientConnection.SetStringContentHandler(StringHandler);
                     clientConnection.SetFileByteHandler(FileByteHandler);
@@ -70,7 +70,7 @@ namespace DdonSocket
                     Task.Run(async () =>
                     {
                         var clientId = await clientConnection.ConsecutiveReadStreamAsync();
-                        DdonSocketClientConnectionFactory.Remove(clientId);
+                        DdonSocketClientConnectionFactory.GetDdonSocketClientConnectionFactory().Remove(clientId);
                         Log.Information($"客户端断开连接:{clientId}");
                     });
                 }

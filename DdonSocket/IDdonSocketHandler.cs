@@ -7,16 +7,16 @@ namespace DdonSocket
         /// <summary>
         /// 文本流处理器
         /// </summary>
-        public abstract Action<IServiceProvider?, DdonSocketHeadDto, string> StringHandler { get; }
+        public abstract Action<DdonSocketPackageInfo<string>> StringHandler { get; }
 
         /// <summary>
         /// 文件流处理器
         /// </summary>
-        public abstract Action<IServiceProvider?, DdonSocketHeadDto, byte[]> FileByteHandler { get; }
+        public abstract Action<DdonSocketPackageInfo<byte[]>> FileByteHandler { get; }
 
         /// <summary>
         /// Byte 流处理器
         /// </summary>
-        public abstract Action<IServiceProvider?, DdonSocketHeadDto, Stream> StreamHandler { get; }
+        public abstract Action<DdonSocketPackageInfo<Stream>> StreamHandler { get; }
     }
 }
