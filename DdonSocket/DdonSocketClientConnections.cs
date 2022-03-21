@@ -6,16 +6,15 @@
 
         private readonly Dictionary<Guid, DdonSocketClient> Pairs = new();
 
-        private static DdonSocketClientConnections? ddonSocketClientConnectionFactory;
+        private static DdonSocketClientConnections? ddonSocketClientConnection;
 
         public static DdonSocketClientConnections GetDdonSocketClientConnectionFactory()
         {
-            lock (_lock)
-            {
-                if (ddonSocketClientConnectionFactory == null)
-                    ddonSocketClientConnectionFactory = new DdonSocketClientConnections();
-            }
-            return ddonSocketClientConnectionFactory;
+            if (ddonSocketClientConnection != null) return ddonSocketClientConnection;
+
+            lock (_lock) ddonSocketClientConnection ??= new DdonSocketClientConnections();
+
+            return ddonSocketClientConnection;
         }
 
         public DdonSocketClient? GetClient(Guid clientId)
