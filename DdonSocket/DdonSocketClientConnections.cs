@@ -1,19 +1,19 @@
 ﻿namespace DdonSocket
 {
-    public class DdonSocketClientConnectionFactory
+    public class DdonSocketClientConnections
     {
         private static readonly object _lock = new();
 
         private readonly Dictionary<Guid, DdonSocketClient> Pairs = new();
 
-        private static DdonSocketClientConnectionFactory? ddonSocketClientConnectionFactory;
+        private static DdonSocketClientConnections? ddonSocketClientConnectionFactory;
 
-        public static DdonSocketClientConnectionFactory GetDdonSocketClientConnectionFactory()
+        public static DdonSocketClientConnections GetDdonSocketClientConnectionFactory()
         {
             lock (_lock)
             {
                 if (ddonSocketClientConnectionFactory == null)
-                    ddonSocketClientConnectionFactory = new DdonSocketClientConnectionFactory();
+                    ddonSocketClientConnectionFactory = new DdonSocketClientConnections();
             }
             return ddonSocketClientConnectionFactory;
         }
