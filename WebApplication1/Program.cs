@@ -8,8 +8,6 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddSingleton<Data>();
-builder.Services.AddTransient<Test>();
 builder.Services.AddDdonSocket<TestDdonSocketHandler>(builder.Configuration);
 
 var app = builder.Build();
