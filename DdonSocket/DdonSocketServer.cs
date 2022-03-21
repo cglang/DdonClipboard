@@ -58,7 +58,7 @@ namespace DdonSocket
                 {
                     var client = Server.AcceptTcpClient();
                     var clientConnection = new DdonSocketConnection(client, _services);
-                    DdonSocketClientConnections.GetDdonSocketClientConnectionFactory().Add(clientConnection);
+                    DdonSocketClientConnections.GetDdonSocketClientConnection().Add(clientConnection);
 
                     clientConnection.SetStringContentHandler(StringHandler);
                     clientConnection.SetFileByteHandler(FileByteHandler);
@@ -70,7 +70,7 @@ namespace DdonSocket
                     Task.Run(async () =>
                     {
                         var clientId = await clientConnection.ConsecutiveReadStreamAsync();
-                        DdonSocketClientConnections.GetDdonSocketClientConnectionFactory().Remove(clientId);
+                        DdonSocketClientConnections.GetDdonSocketClientConnection().Remove(clientId);
                         Log.Information($"客户端断开连接:{clientId}");
                     });
                 }

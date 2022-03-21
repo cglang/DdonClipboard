@@ -20,7 +20,7 @@ class DdonSocketClientHandler : IDdonSocketHandler
         {
             // 客户端要转发文本
         }
-        var client = DdonSocketClientConnections.GetDdonSocketClientConnectionFactory().GetClient(info.Head.SendClientId);
+        var client = DdonSocketClientConnections.GetDdonSocketClientConnection().GetClient(info.Head.SendClientId);
         Console.WriteLine($"客户端:{info.Head} 数据:{info.Data}");
         if (client is not null)
             await client.SendStringAsync(info.Data);
