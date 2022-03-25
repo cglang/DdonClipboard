@@ -2,7 +2,7 @@
 
 namespace DdonSocket
 {
-    public abstract class IDdonSocketHandler
+    public abstract class DdonSocketHandlerCore
     {
         /// <summary>
         /// 文本流处理器

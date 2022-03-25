@@ -3,7 +3,7 @@ using DdonSocket.Extra;
 
 namespace WebApplication1
 {
-    public class TestDdonSocketHandler : IDdonSocketHandler
+    public class TestDdonSocketHandler : DdonSocketHandlerCore
     {
         public override Action<DdonSocketPackageInfo<string>> StringHandler => async (info) =>
         {
@@ -15,7 +15,7 @@ namespace WebApplication1
             {
                 // 客户端要转发文本
             }
-            var client = DdonSocketClientConnections.GetDdonSocketClientConnectionFactory().GetClient(info.Head.SendClientId);
+            var client = DdonSocketClientConnections<TestDdonSocketHandler>.GetDdonSocketClientConnectionFactory().GetClient(info.Head.SendClientId);
             Console.WriteLine($"客户端:{info.Head} 数据:{info.Data}");
             if (client is not null)
                 await client.SendStringAsync(info.Data);

@@ -10,8 +10,6 @@ namespace DdonSocket.Extra
 
         public TData Data { get; set; }
 
-        public DdonSocketClientConnections ClientConnections => DdonSocketClientConnections.GetDdonSocketClientConnectionFactory();
-
         public DdonSocketPackageInfo(IServiceProvider? serviceProvider,
             DdonSocketHeadDto headDto,
             TData data)

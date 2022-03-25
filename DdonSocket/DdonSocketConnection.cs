@@ -2,7 +2,7 @@
 
 namespace DdonSocket
 {
-    public class DdonSocketConnection : DdonSocketClient
+    public class DdonSocketConnection<TDdonSocketHandler> : DdonSocketClient<TDdonSocketHandler> where TDdonSocketHandler : DdonSocketHandlerCore, new()
     {
         public DdonSocketConnection(TcpClient tcpClient, IServiceProvider? service) : base(tcpClient, service) { }
 

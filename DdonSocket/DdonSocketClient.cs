@@ -6,9 +6,8 @@ using System.Text.Json;
 
 namespace DdonSocket
 {
-    public class DdonSocketClient : DdonSocketDefaultHandler, IDisposable
+    public class DdonSocketClient<TDdonSocketHandler> : DdonSocketHandler<TDdonSocketHandler>, IDisposable where TDdonSocketHandler : DdonSocketHandlerCore, new()
     {
-        //private readonly ILogger<DdonSocketClient>? _logger = DdonSocketLogger.GetLogger<DdonSocketClient>();
         protected const int GuidLength = 16;
 
         private readonly IServiceProvider? _serviceProvider;
@@ -62,7 +61,7 @@ namespace DdonSocket
             return DdonSocketCommon.ByteCut(bytes);
         }
 
-        public DdonSocketClient StartRead()
+        public DdonSocketClient<TDdonSocketHandler> StartRead()
         {
             Task.Run(async () =>
             {

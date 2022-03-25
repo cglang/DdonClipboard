@@ -8,10 +8,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddDdonSocket<TestDdonSocketHandler>(builder.Configuration);
+//builder.Services.AddDdonSocket<TestDdonSocketHandler>(builder.Configuration);
 
 var app = builder.Build();
-DdonSocketServer.CreateServer("127.0.0.1", 5003, app.Services).Start();
+DdonSocketServer<TestDdonSocketHandler>.CreateServer("127.0.0.1", 5003, app.Services).Start();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

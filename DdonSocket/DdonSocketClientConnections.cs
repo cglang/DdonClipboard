@@ -1,28 +1,28 @@
 ﻿namespace DdonSocket
 {
-    public class DdonSocketClientConnections
+    public class DdonSocketClientConnections<TDdonSocketHandler> where TDdonSocketHandler : DdonSocketHandlerCore, new()
     {
         private static readonly object _lock = new();
 
-        private readonly Dictionary<Guid, DdonSocketClient> Pairs = new();
+        private readonly Dictionary<Guid, DdonSocketClient<TDdonSocketHandler>> Pairs = new();
 
-        private static DdonSocketClientConnections? ddonSocketClientConnection;
+        private static DdonSocketClientConnections<TDdonSocketHandler>? ddonSocketClientConnection;
 
-        public static DdonSocketClientConnections GetDdonSocketClientConnectionFactory()
+        public static DdonSocketClientConnections<TDdonSocketHandler> GetDdonSocketClientConnectionFactory()
         {
             if (ddonSocketClientConnection != null) return ddonSocketClientConnection;
 
-            lock (_lock) ddonSocketClientConnection ??= new DdonSocketClientConnections();
+            lock (_lock) ddonSocketClientConnection ??= new DdonSocketClientConnections<TDdonSocketHandler>();
 
             return ddonSocketClientConnection;
         }
 
-        public DdonSocketClient? GetClient(Guid clientId)
+        public DdonSocketClient<TDdonSocketHandler>? GetClient(Guid clientId)
         {
             return Pairs.ContainsKey(clientId) ? Pairs[clientId] : null;
         }
 
-        public void Add(DdonSocketClient client)
+        public void Add(DdonSocketClient<TDdonSocketHandler> client)
         {
             Pairs.Add(client.ClientId, client);
         }
