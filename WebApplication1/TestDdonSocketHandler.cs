@@ -15,7 +15,7 @@ namespace WebApplication1
             {
                 // 客户端要转发文本
             }
-            var client = DdonSocketClientConnections<TestDdonSocketHandler>.GetDdonSocketClientConnectionFactory().GetClient(info.Head.SendClientId);
+            var client = DdonSocketClientConnections<TestDdonSocketHandler>.GetInstance().GetClient(info.Head.SendClientId);
             Console.WriteLine($"客户端:{info.Head} 数据:{info.Data}");
             if (client is not null)
                 await client.SendStringAsync(info.Data);

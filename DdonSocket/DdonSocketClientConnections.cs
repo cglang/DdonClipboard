@@ -8,7 +8,7 @@
 
         private static DdonSocketClientConnections<TDdonSocketHandler>? ddonSocketClientConnection;
 
-        public static DdonSocketClientConnections<TDdonSocketHandler> GetDdonSocketClientConnectionFactory()
+        public static DdonSocketClientConnections<TDdonSocketHandler> GetInstance()
         {
             if (ddonSocketClientConnection != null) return ddonSocketClientConnection;
 

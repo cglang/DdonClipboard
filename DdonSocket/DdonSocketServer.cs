@@ -46,7 +46,7 @@ namespace DdonSocket
                 {
                     var client = Server.AcceptTcpClient();
                     var clientConnection = new DdonSocketConnection<TDdonSocketHandler>(client, _services);
-                    DdonSocketClientConnections<TDdonSocketHandler>.GetDdonSocketClientConnectionFactory().Add(clientConnection);
+                    DdonSocketClientConnections<TDdonSocketHandler>.GetInstance().Add(clientConnection);
 
                     Log.Information($"接收到客户端:{clientConnection.ClientId}");
 
@@ -54,7 +54,7 @@ namespace DdonSocket
                     Task.Run(async () =>
                     {
                         var clientId = await clientConnection.ConsecutiveReadStreamAsync();
-                        DdonSocketClientConnections<TDdonSocketHandler>.GetDdonSocketClientConnectionFactory().Remove(clientId);
+                        DdonSocketClientConnections<TDdonSocketHandler>.GetInstance().Remove(clientId);
                         Log.Information($"客户端断开连接:{clientId}");
                     });
                 }
