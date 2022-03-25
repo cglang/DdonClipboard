@@ -3,7 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using DdonSocket;
+using DdonSocket.Extra;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace DdonTcpClient
 {
@@ -11,18 +15,27 @@ namespace DdonTcpClient
     {
         static async Task Main(string[] args)
         {
-            var services = new ServiceCollection();
+            // 从appsettings.json文件中读入日志的配置信息
+            var configuration = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json")
+                .Build();
 
+            var services = new ServiceCollection();
+            services.AddLogging(x =>
+            {
+                //x.SetMinimumLevel(LogLevel.Debug);
+                x.AddConfiguration(configuration);
+                x.AddConsole(); // 将日志输出到控制台
+            });
             var provider = services.BuildServiceProvider();
 
+            var log = provider.GetRequiredService<ILogger<Program>>();
+            log.LogInformation("testi");
+            log.LogDebug("testd");
+            log.LogWarning("w");
+            log.LogError("e");
 
-
-            //var ddonTcpClient = new DdonSocket.DdonSocketClient("127.0.0.1", 5003);
-
-            //ddonTcpClient.SetStringContentHandler((info) =>
-            //{
-            //    Console.WriteLine($"接收到来自服务端的数据:{info.Data}");
-            //});
+            //var ddonTcpClient = new DdonSocketClient<DdonSocketHandler>("127.0.0.1", 5003);
 
             //ddonTcpClient.StartRead();
 
@@ -37,5 +50,18 @@ namespace DdonTcpClient
             //    await ddonTcpClient.SendStringAsync($"{sendData}", sendClientId);
             //}
         }
+    }
+
+
+    class DdonSocketHandler : DdonSocketHandlerCore
+    {
+        public override Action<DdonSocketPackageInfo<string>> StringHandler => info =>
+        {
+            Console.WriteLine($"接收到来自服务端的数据:{info.Data}");
+        };
+
+        public override Action<DdonSocketPackageInfo<byte[]>> FileByteHandler => info => { };
+
+        public override Action<DdonSocketPackageInfo<Stream>> StreamHandler => info => { };
     }
 }

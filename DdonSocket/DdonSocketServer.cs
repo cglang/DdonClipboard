@@ -1,12 +1,11 @@
 ﻿using DdonSocket.Extra;
-using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using System.Net;
 using System.Net.Sockets;
 
 namespace DdonSocket
 {
-    public class DdonSocketServer : DdonSocketDefaultHandler
+    public class DdonSocketServer<TDdonSocketHandler> where TDdonSocketHandler : DdonSocketHandlerCore, new()
     {
         private readonly IServiceProvider? _services;
 
@@ -17,34 +16,23 @@ namespace DdonSocket
             DdonSocketLogger.InitLogger();
             _services = services;
 
-            var handler = services.GetService<IDdonSocketHandler>() ?? throw new Exception("未找到SocketHandler");
-            InitHandler(handler);
-
             Server = new TcpListener(IPAddress.Parse(host), post);
         }
 
-        private DdonSocketServer(string host, int post, IDdonSocketHandler handler)
+        private DdonSocketServer(string host, int post)
         {
             DdonSocketLogger.InitLogger();
-            InitHandler(handler);
             Server = new TcpListener(IPAddress.Parse(host), post);
         }
 
-        public static DdonSocketServer CreateServer(string host, int post, IServiceProvider services)
+        public static DdonSocketServer<TDdonSocketHandler> CreateServer(string host, int post, IServiceProvider services)
         {
-            return new DdonSocketServer(host, post, services);
+            return new DdonSocketServer<TDdonSocketHandler>(host, post, services);
         }
 
-        public static DdonSocketServer CreateServer(string host, int post, IDdonSocketHandler handler)
+        public static DdonSocketServer<TDdonSocketHandler> CreateServer(string host, int post)
         {
-            return new DdonSocketServer(host, post, handler);
-        }
-
-        private void InitHandler(IDdonSocketHandler handler)
-        {
-            SetStringContentHandler(handler.StringHandler);
-            SetFileByteHandler(handler.FileByteHandler);
-            SetStreamHandler(handler.StreamHandler);
+            return new DdonSocketServer<TDdonSocketHandler>(host, post);
         }
 
         public void Start()
@@ -57,12 +45,8 @@ namespace DdonSocket
                 while (true)
                 {
                     var client = Server.AcceptTcpClient();
-                    var clientConnection = new DdonSocketConnection(client, _services);
-                    DdonSocketClientConnections.GetDdonSocketClientConnection().Add(clientConnection);
-
-                    clientConnection.SetStringContentHandler(StringHandler);
-                    clientConnection.SetFileByteHandler(FileByteHandler);
-                    clientConnection.SetStreamHandler(StreamHandler);
+                    var clientConnection = new DdonSocketConnection<TDdonSocketHandler>(client, _services);
+                    DdonSocketClientConnections<TDdonSocketHandler>.GetInstance().Add(clientConnection);
 
                     Log.Information($"接收到客户端:{clientConnection.ClientId}");
 
@@ -70,7 +54,7 @@ namespace DdonSocket
                     Task.Run(async () =>
                     {
                         var clientId = await clientConnection.ConsecutiveReadStreamAsync();
-                        DdonSocketClientConnections.GetDdonSocketClientConnection().Remove(clientId);
+                        DdonSocketClientConnections<TDdonSocketHandler>.GetInstance().Remove(clientId);
                         Log.Information($"客户端断开连接:{clientId}");
                     });
                 }
