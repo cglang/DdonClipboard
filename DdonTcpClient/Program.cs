@@ -1,4 +1,4 @@
-﻿
+﻿using Ddon.Serilog;
 using Ddon.Socket;
 using Ddon.Socket.Extra;
 using Microsoft.Extensions.DependencyInjection;
@@ -10,43 +10,28 @@ namespace DdonTcpClient
     {
         static async Task Main(string[] args)
         {
+            await Host.CreateDefaultBuilder(args)
+                .ConfigureServices(services =>
+                {
+                    services.AddHostedService<MyConsoleAppHostedService>();
+                })
+                .CreateApplication<SerilogModule>()
+                .RunConsoleAsync();
+        }
+    }
 
-            //Host.CreateDefaultBuilder(args).ConfigureWebHostDefaults(webBuilder => webBuilder.UseStartup<Startup>());
+    class MyConsoleAppHostedService : IHostedService
+    {
+        private readonly IServiceProvider _services;
 
-            //await Host.CreateDefaultBuilder(args).ConfigureServices(services =>
-            //{
-            //    services.AddHostedService<MyConsoleAppHostedService>();
-            //}).RunConsoleAsync();
+        public MyConsoleAppHostedService(IServiceProvider services)
+        {
+            _services = services;
+        }
 
-            //        await Host.CreateDefaultBuilder(args)
-            //.ConfigureServices(services =>
-            //{
-            //    services.AddHostedService<MyConsoleAppHostedService>();
-            //})
-            //.RunConsoleAsync();
-
-
-            // 从appsettings.json文件中读入日志的配置信息
-            //var configuration = new ConfigurationBuilder()
-            //    .AddJsonFile("appsettings.json")
-            //    .Build();
-
-            //var services = new ServiceCollection();
-            //services.AddLogging(x =>
-            //{
-            //    //x.SetMinimumLevel(LogLevel.Debug);
-            //    x.AddConfiguration(configuration);
-            //    x.AddConsole(); // 将日志输出到控制台
-            //});
-            //var provider = services.BuildServiceProvider();
-
-            //var log = provider.GetRequiredService<ILogger<Program>>();
-            //log.LogInformation("testi");
-            //log.LogDebug("testd");
-            //log.LogWarning("w");
-            //log.LogError("e");
-
-            var ddonTcpClient = new DdonSocketClient<DdonSocketHandler>("127.0.0.1", 5003);
+        public async Task StartAsync(CancellationToken cancellationToken)
+        {
+            var ddonTcpClient = new DdonSocketClient<DdonSocketHandler>("127.0.0.1", 5003, _services);
 
             ddonTcpClient.StartRead();
 
@@ -61,8 +46,12 @@ namespace DdonTcpClient
                 await ddonTcpClient.SendStringAsync($"{sendData}", sendClientId);
             }
         }
-    }
 
+        public async Task StopAsync(CancellationToken cancellationToken)
+        {
+            await Task.CompletedTask;
+        }
+    }
 
     class DdonSocketHandler : DdonSocketHandlerCore
     {

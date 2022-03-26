@@ -30,6 +30,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\DdonFramework\src\Ddon.Serilog\Ddon.Serilog.csproj" />
     <ProjectReference Include="..\..\DdonFramework\src\Ddon.Socket\Ddon.Socket.csproj" />
   </ItemGroup>
 
