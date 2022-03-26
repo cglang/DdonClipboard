@@ -1,5 +1,5 @@
-﻿using DdonSocket;
-using DdonSocket.Extra;
+﻿using Ddon.Socket;
+using Ddon.Socket.Extra;
 
 namespace WebApplication1
 {

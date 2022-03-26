@@ -1,4 +1,4 @@
-using DdonSocket;
+using Ddon.Socket;
 using WebApplication1;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -7,8 +7,6 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
-//builder.Services.AddDdonSocket<TestDdonSocketHandler>(builder.Configuration);
 
 var app = builder.Build();
 DdonSocketServer<TestDdonSocketHandler>.CreateServer("127.0.0.1", 5003, app.Services).Start();

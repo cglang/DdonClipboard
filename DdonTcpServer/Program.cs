@@ -1,9 +1,38 @@
-﻿using DdonSocket;
-using DdonSocket.Extra;
+﻿using Ddon.Socket;
+using Ddon.Socket.Extra;
+using DdonTcpServer;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
-DdonSocketServer<DdonSocketHandler>.CreateServer("127.0.0.1", 5003).Start();
+await Host.CreateDefaultBuilder(args)
+    .ConfigureServices(services =>
+    {
+        services.AddHostedService<MyConsoleAppHostedService>();
+    })
+    .CreateApplication<ServerModule>()
+    .RunConsoleAsync();
 
-Console.ReadKey();
+
+class MyConsoleAppHostedService : IHostedService
+{
+    private readonly IServiceProvider _serviceProvider;
+
+    public MyConsoleAppHostedService(IServiceProvider serviceProvider)
+    {
+        _serviceProvider = serviceProvider;
+    }
+
+    public async Task StartAsync(CancellationToken cancellationToken)
+    {
+        DdonSocketServer<DdonSocketHandler>.CreateServer("127.0.0.1", 5003, _serviceProvider).Start();
+        await Task.CompletedTask;
+    }
+
+    public async Task StopAsync(CancellationToken cancellationToken)
+    {
+        await Task.CompletedTask;
+    }
+}
 
 class DdonSocketHandler : DdonSocketHandlerCore
 {

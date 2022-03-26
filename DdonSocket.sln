@@ -3,15 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.1.32228.430
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DdonSocket", "DdonSocket\DdonSocket.csproj", "{BB75F523-2026-4AC8-BD1B-71558F2BAD2F}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DdonTcpClient", "DdonTcpClient\DdonTcpClient.csproj", "{265F3DAB-BA84-43F1-8BF9-8EB7B7708F80}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DdonTcpServer", "DdonTcpServer\DdonTcpServer.csproj", "{265CB90E-9C58-4ECF-91D2-4C6F397D14C9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApplication1", "WebApplication1\WebApplication1.csproj", "{93D69F44-6CE5-4C7D-BBBA-065CC92399B3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApplication1", "WebApplication1\WebApplication1.csproj", "{93D69F44-6CE5-4C7D-BBBA-065CC92399B3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DdonInvokeCore", "DdonInvoke\DdonInvokeCore.csproj", "{D3A5167F-B8DF-4DC2-B479-FA8EBF4521BF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ddon.Socket", "..\DdonFramework\src\Ddon.Socket\Ddon.Socket.csproj", "{D8CD4DBA-8EEB-41C4-A807-EDA4E1EADACD}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ddon.Core", "..\DdonFramework\src\Ddon.Core\Ddon.Core.csproj", "{B330F05D-CF49-4B99-AE3E-8185803B5D00}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,10 +19,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{BB75F523-2026-4AC8-BD1B-71558F2BAD2F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BB75F523-2026-4AC8-BD1B-71558F2BAD2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BB75F523-2026-4AC8-BD1B-71558F2BAD2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BB75F523-2026-4AC8-BD1B-71558F2BAD2F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{265F3DAB-BA84-43F1-8BF9-8EB7B7708F80}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{265F3DAB-BA84-43F1-8BF9-8EB7B7708F80}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{265F3DAB-BA84-43F1-8BF9-8EB7B7708F80}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -35,10 +31,14 @@ Global
 		{93D69F44-6CE5-4C7D-BBBA-065CC92399B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{93D69F44-6CE5-4C7D-BBBA-065CC92399B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{93D69F44-6CE5-4C7D-BBBA-065CC92399B3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D3A5167F-B8DF-4DC2-B479-FA8EBF4521BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D3A5167F-B8DF-4DC2-B479-FA8EBF4521BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D3A5167F-B8DF-4DC2-B479-FA8EBF4521BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D3A5167F-B8DF-4DC2-B479-FA8EBF4521BF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D8CD4DBA-8EEB-41C4-A807-EDA4E1EADACD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D8CD4DBA-8EEB-41C4-A807-EDA4E1EADACD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D8CD4DBA-8EEB-41C4-A807-EDA4E1EADACD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D8CD4DBA-8EEB-41C4-A807-EDA4E1EADACD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B330F05D-CF49-4B99-AE3E-8185803B5D00}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B330F05D-CF49-4B99-AE3E-8185803B5D00}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B330F05D-CF49-4B99-AE3E-8185803B5D00}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B330F05D-CF49-4B99-AE3E-8185803B5D00}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
