@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DdonClipboardClient", "Ddon
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DdonClipboardServer", "DdonClipboardServer\DdonClipboardServer.csproj", "{E4E70D66-D69F-4196-820D-3C38E5036A4B}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ddon.KeyValueStorage", "..\DdonFramework\src\Ddon.KeyValueStorage\Ddon.KeyValueStorage.csproj", "{8213538A-D0EB-4F5B-8A26-81D9C8E167C2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{E4E70D66-D69F-4196-820D-3C38E5036A4B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E4E70D66-D69F-4196-820D-3C38E5036A4B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E4E70D66-D69F-4196-820D-3C38E5036A4B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8213538A-D0EB-4F5B-8A26-81D9C8E167C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8213538A-D0EB-4F5B-8A26-81D9C8E167C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8213538A-D0EB-4F5B-8A26-81D9C8E167C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8213538A-D0EB-4F5B-8A26-81D9C8E167C2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

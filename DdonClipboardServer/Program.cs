@@ -1,8 +1,11 @@
-﻿using Ddon.Socket;
+﻿using Ddon.KeyValueStorage;
+using Ddon.Socket;
 using Ddon.Socket.Extra;
+using DdonClipboardServer;
 using DdonTcpServer;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 await Host.CreateDefaultBuilder(args)
     .ConfigureServices(services =>
@@ -16,15 +19,27 @@ await Host.CreateDefaultBuilder(args)
 class MyConsoleAppHostedService : IHostedService
 {
     private readonly IServiceProvider _serviceProvider;
+    private readonly ILogger<MyConsoleAppHostedService> _logger;
 
-    public MyConsoleAppHostedService(IServiceProvider serviceProvider)
+    public MyConsoleAppHostedService(IServiceProvider serviceProvider, ILogger<MyConsoleAppHostedService> logger)
     {
         _serviceProvider = serviceProvider;
+        _logger = logger;
     }
 
     public async Task StartAsync(CancellationToken cancellationToken)
     {
-        DdonSocketServer<DdonSocketHandler>.CreateServer("127.0.0.1", 5003, _serviceProvider).Start();
+        // 配置文件读取和初始化
+        var configKv = DdonKvStorageFactory<ApplicaionConfig>.GetInstance(slice: "config");
+        var config = await configKv.GetValueAsync("config");
+        if (config is null)
+        {
+            await configKv.SetValueAsync("config", ApplicaionConfig.GetDefaultConfig());
+            _logger.LogError("请修改配置文件");
+            return;
+        }
+
+        DdonSocketServer<DdonSocketHandler>.CreateServer(config.Ip, config.Port, _serviceProvider).Start();
         await Task.CompletedTask;
     }
 
@@ -38,18 +53,33 @@ class DdonSocketHandler : DdonSocketHandlerCore
 {
     public override Action<DdonSocketPackageInfo<string>> StringHandler => async info =>
     {
-        if (info.Head.Opcode.Equals(DdonSocketOpcode.Authentication))
+        var logger = info.ServiceProvider.GetRequiredService<ILogger<DdonSocketHandler>>();
+        logger.LogInformation($"客户端:{info.Head} 消息:{info.Data}");
+
+        if (info.Head.OpCode.Equals(DdonSocketOpcode.Authentication))
         {
-            // 客户端要获取在线数量
+            var client = DdonSocketClientConnections<DdonSocketHandler>.GetInstance().GetClient(info.Head.ClientId);
+            if (client != null) client.GroupId = info.Head.GroupId;
         }
-        else if (info.Head.Opcode.Equals(DdonSocketOpcode.Repost))
+        else if (info.Head.OpCode.Equals(DdonSocketOpcode.Repost))
         {
-            // 客户端要转发文本
+            if (info.Head.SendGroup != default)
+            {
+                var clients = DdonSocketClientConnections<DdonSocketHandler>.GetInstance().GetClients(info.Head.SendGroup);
+                if (clients == null) return;
+                Parallel.ForEach(clients, async client =>
+                {
+                    if (client.ClientId != info.Head.ClientId)
+                        await client.SendStringAsync(DdonSocketOpcode.Repost, info.Data, client.ClientId);
+                });
+            }
+            else if (info.Head.SendClient != default)
+            {
+                var client = DdonSocketClientConnections<DdonSocketHandler>.GetInstance().GetClient(info.Head.SendClient);
+                if (client == null) return;
+                await client.SendStringAsync(DdonSocketOpcode.Repost, info.Data, client.ClientId);
+            }
         }
-        var client = DdonSocketClientConnections<DdonSocketHandler>.GetInstance().GetClient(info.Head.SendClientId);
-        Console.WriteLine($"客户端:{info.Head} 数据:{info.Data}");
-        if (client is not null)
-            await client.SendStringAsync(info.Data);
     };
 
     public override Action<DdonSocketPackageInfo<byte[]>> FileByteHandler => info => { };

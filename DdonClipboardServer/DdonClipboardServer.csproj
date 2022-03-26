@@ -10,6 +10,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\DdonFramework\src\Ddon.Serilog\Ddon.Serilog.csproj" />
     <ProjectReference Include="..\..\DdonFramework\src\Ddon.Socket\Ddon.Socket.csproj" />
+    <ProjectReference Include="..\..\DdonFramework\src\Ddon.KeyValueStorage\Ddon.KeyValueStorage.csproj" />
   </ItemGroup>
 
 </Project>
