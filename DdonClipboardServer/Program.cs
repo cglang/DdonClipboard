@@ -1,11 +1,13 @@
 ﻿using Ddon.KeyValueStorage;
 using Ddon.Socket;
 using Ddon.Socket.Extra;
+using Ddon.Socket.Handler;
 using DdonClipboardServer;
 using DdonTcpServer;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using System.Text;
 
 await Host.CreateDefaultBuilder(args)
     .ConfigureServices(services =>
@@ -39,7 +41,7 @@ class MyConsoleAppHostedService : IHostedService
             return;
         }
 
-        DdonSocketServer<DdonSocketHandler>.CreateServer(config.Ip, config.Port, _serviceProvider).Start();
+        DdonSocketServerFactory<DdonSocketHandler>.CreateServer(config.Ip, config.Port).Start();
         await Task.CompletedTask;
     }
 
@@ -49,36 +51,43 @@ class MyConsoleAppHostedService : IHostedService
     }
 }
 
-class DdonSocketHandler : DdonSocketHandlerCore
+class DdonSocketHandler : DdonSocketHandlerBase
 {
     public override Action<DdonSocketPackageInfo<string>> StringHandler => async info =>
     {
-        var logger = info.ServiceProvider.GetRequiredService<ILogger<DdonSocketHandler>>();
-        logger.LogInformation($"客户端:{info.Head} 消息:{info.Data}");
-
-        if (info.Head.OpCode.Equals(DdonSocketOpcode.Authentication))
+        if (info.Head.OpCode.Equals(DdonSocketOpCode.Authentication))
         {
-            var client = DdonSocketClientConnections<DdonSocketHandler>.GetInstance().GetClient(info.Head.ClientId);
-            if (client != null) client.GroupId = info.Head.GroupId;
+            //var client = DdonSocketClientConnections<DdonSocketHandler>.GetInstance().GetClient(info.Head.ClientId);
+            //if (client != null) client.GroupId = info.Head.GroupId;
         }
-        else if (info.Head.OpCode.Equals(DdonSocketOpcode.Repost))
+        else if (info.Head.OpCode.Equals(DdonSocketOpCode.Repost))
         {
             if (info.Head.SendGroup != default)
             {
-                var clients = DdonSocketClientConnections<DdonSocketHandler>.GetInstance().GetClients(info.Head.SendGroup);
-                if (clients == null) return;
-                Parallel.ForEach(clients, async client =>
-                {
-                    if (client.ClientId != info.Head.ClientId)
-                        await client.SendStringAsync(DdonSocketOpcode.Repost, info.Data, client.ClientId);
-                });
+                //var clients = info.Connections.GetClients(info.Head.SendGroup);
+                //if (clients == null) return;
+                //Parallel.ForEach(clients, async client =>
+                //{
+                //    if (client.ClientId != info.Head.ClientId)
+                //        //await client
+                //        //.SendStringAsync(DdonSocketOpCode.Repost, info.Data, client.ClientId);
+                //});
             }
             else if (info.Head.SendClient != default)
             {
-                var client = DdonSocketClientConnections<DdonSocketHandler>.GetInstance().GetClient(info.Head.SendClient);
-                if (client == null) return;
-                await client.SendStringAsync(DdonSocketOpcode.Repost, info.Data, client.ClientId);
+                //var client = info.Connections.GetClient(info.Head.SendClient);
+                //if (client == null) return;
+
+                //await client.SendStringAsync("test");
             }
+            var clients = DdonSocketStorage<DdonSocketHandler>.GetInstance().Clients;
+            Parallel.ForEach(clients, async client =>
+            {
+                //if (client.SocketId != info.Head.ClientId)
+                await client.SendStringAsync(info.Data, DdonSocketOpCode.Repost, client.SocketId);
+            });
+
+            await Task.CompletedTask;
         }
     };
 

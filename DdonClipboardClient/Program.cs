@@ -2,6 +2,7 @@
 using Ddon.Serilog;
 using Ddon.Socket;
 using Ddon.Socket.Extra;
+using Ddon.Socket.Handler;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -48,11 +49,11 @@ namespace DdonClipboardClient
             }
 
             // 连接服务器
-            var ddonTcpClient = new DdonSocketClient<DdonSocketHandler>(config.ServerIP, config.ServerPort, _services);
-            ddonTcpClient.StartRead();
-            _logger.LogInformation($"被分配Id:{ddonTcpClient.ClientId}");
+            var ddonTcpClient = DdonSocketClientFactory<DdonSocketHandler>.CreateClient(config.ServerIP, config.ServerPort).Start();
 
-            await ddonTcpClient.SendAuthenticationInfoAsync(config.GroupId);
+            _logger.LogInformation($"被分配Id:{ddonTcpClient.SocketId}");
+
+            //await ddonTcpClient.SendAuthenticationInfoAsync(config.GroupId);
 
             // 检测剪切板变化
             STimer timer = new() { Enabled = true, Interval = 1000 };
@@ -63,7 +64,7 @@ namespace DdonClipboardClient
                 {
                     _logger.LogInformation($"剪切板变化:{text}");
                     ClipboardText.T = text ?? string.Empty;
-                    await ddonTcpClient.SendStringAsync(DdonSocketOpcode.Repost, $"{ClipboardText.T}", sendGroupId: config.GroupId);
+                    await ddonTcpClient.SendStringAsync($"{ClipboardText.T}", DdonSocketOpCode.Repost, sendGroupId: config.GroupId);
                 }
             };
             timer.Start();
@@ -75,12 +76,11 @@ namespace DdonClipboardClient
         }
     }
 
-    class DdonSocketHandler : DdonSocketHandlerCore
+    class DdonSocketHandler : DdonSocketHandlerBase
     {
         public override Action<DdonSocketPackageInfo<string>> StringHandler => async info =>
         {
-            var logger = info.ServiceProvider.GetRequiredService<ILogger<DdonSocketHandler>>();
-            logger.LogInformation($"接收到剪切板同步:{info.Data}");
+            Console.WriteLine($"接收到剪切板同步:{info.Data}");
             ClipboardText.T = info.Data;
             await ClipboardService.SetTextAsync(info.Data);
         };
