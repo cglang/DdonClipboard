@@ -1,4 +1,5 @@
-﻿using Ddon.KeyValueStorage;
+﻿using Ddon.Core;
+using Ddon.KeyValueStorage;
 using Ddon.Socket;
 using Ddon.Socket.Extra;
 using Ddon.Socket.Handler;
@@ -25,6 +26,8 @@ class MyConsoleAppHostedService : IHostedService
 
     public MyConsoleAppHostedService(IServiceProvider serviceProvider, ILogger<MyConsoleAppHostedService> logger)
     {
+        ServiceProviderFactory.InitServiceProvider(serviceProvider);
+
         _serviceProvider = serviceProvider;
         _logger = logger;
     }
@@ -55,6 +58,8 @@ class DdonSocketHandler : DdonSocketHandlerBase
 {
     public override Action<DdonSocketPackageInfo<string>> StringHandler => async info =>
     {
+        var logger = ServiceProviderFactory.GetServiceProvider().GetRequiredService<ILogger<DdonSocketHandler>>();
+        logger.LogInformation("日志可用");
         if (info.Head.OpCode.Equals(DdonSocketOpCode.Authentication))
         {
             //var client = DdonSocketClientConnections<DdonSocketHandler>.GetInstance().GetClient(info.Head.ClientId);
